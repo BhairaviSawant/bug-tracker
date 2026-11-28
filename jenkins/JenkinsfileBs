@@ -1,14 +1,19 @@
-pipeline{
+pipeline {
+    agent any
 
-agent any
-stages('Unit Test Backend'){
-
-    steps {
-         dir('bugtracker-backend'){
-            go test -v ./...
-         }
-     
+    stages {
+        stage('Backend Unit Tests') {
+            agent {
+                docker {
+                    image 'golang:1.22'
+                    args '-u root'
+                }
+            }
+            steps {
+                dir('bugtracker-backend') {
+                    sh 'go test -v ./...'
+                }
+            }
+        }
     }
-}
-
 }
